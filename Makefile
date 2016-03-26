@@ -1,12 +1,16 @@
-.PHONY: docker-image docker-push docker-pull docker-test docker-run
+.PHONY: docker-image docker-push docker-pull docker-test
 
-REGISTRY=localhost
-PROJECT=fcrontest
-TAG=latest
-IMAGE=$(REGISTRY)/$(PROJECT):$(TAG)
+REGISTRY=theypsilon
+PROJECT=fcron
+FCRON_VERSION=3.2.0
+FCRON_MIRROR=http://fcron.free.fr/archives
+IMAGE=$(REGISTRY)/$(PROJECT):$(FCRON_VERSION)
 
 docker-image:
-	docker build -t $(IMAGE) .
+	docker build \
+	--build-arg FCRON_VERSION=$(FCRON_VERSION) \
+	--build-arg FCRON_MIRROR=$(FCRON_MIRROR) \
+	-t $(IMAGE) .
 
 docker-push:
 	docker push $(IMAGE)
@@ -14,11 +18,5 @@ docker-push:
 docker-pull:
 	docker pull $(IMAGE)
 
-NAME=$(PROJECT)_container
-PORT=6767
-
-docker-run: docker-image
-	docker run --rm -it --name $(NAME)_server $(IMAGE)
-
 docker-test: docker-image
-	docker run --name $(NAME)_test --rm  $(IMAGE) true
+	docker run --rm -it --name $(PROJECT)_test -v `pwd`:/fcron/ $(IMAGE)

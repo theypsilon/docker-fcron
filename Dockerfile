@@ -23,6 +23,4 @@ cd fcron-${FCRON_VERSION} && \
 && apt-get purge -y ${TEMP_PKG} \
 && apt-get clean autoclean && apt-get autoremove -y \
 && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-CMD fcrontab /etc/fcrontab && fcron -f --nosyslog
-
-ADD test.fcrontab /etc/fcrontab
+CMD fcrontab /fcron/fcrontab && fcron -f --nosyslog
