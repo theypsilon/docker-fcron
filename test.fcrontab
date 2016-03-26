@@ -1,0 +1,2 @@
+!stdout(true)
+* * * * * /bin/sh -c "echo hello"
